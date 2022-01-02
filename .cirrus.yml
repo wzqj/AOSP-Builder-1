@@ -60,7 +60,7 @@ task:
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
       - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
       - pwd
-      - repo sync -c -j8 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
+      - repo sync -c -j32 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
