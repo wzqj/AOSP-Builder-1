@@ -3,6 +3,7 @@ env:
     MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1
     DEVICE: bacon
     OEM: oneplus
+    LOCAL_MANIFEST: https://github.com/wzqj/local_manifest
     DT_LINK: https://github.com/LineageOS/android_device_oneplus_bacon
     DT_PATH: device/$OEM/$DEVICE
     VT_LINK: https://github.com/TheMuppets/proprietary_vendor_oneplus
@@ -59,10 +60,8 @@ task:
       - mkdir -p ~/work
       - cd ~/work
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
+      - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
       - repo sync -c -j31 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
-      - git clone $DT_LINK $DT_PATH
-      - git clone $VT_LINK $VT_PATH
-      - git clone $KT_LINK $KT_PATH
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
