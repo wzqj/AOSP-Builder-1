@@ -59,7 +59,7 @@ task:
       - cd ~/work
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
       - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
-      - repo sync -c -j31 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
+      - repo sync -c -j8 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
@@ -75,7 +75,7 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-      - mka -j31 $TARGET
+      - mka -j16 $TARGET
      
   Upload_script:
       - echo "============================"
