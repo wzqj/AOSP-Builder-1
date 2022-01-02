@@ -1,18 +1,19 @@
 env:
-    MANIFEST: https://github.com/PixelExperience/manifest.git -b eleven-plus
-    DEVICE: miatoll
-    OEM: xiaomi
-    DT_LINK: https://github.com/PixelExperience-Devices/device_xiaomi_miatoll.git
+    CIRRUS_CLONE_DEPTH: 1
+    MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1
+    DEVICE: bacon
+    OEM: oneplus
+    DT_LINK: https://github.com/LineageOS/android_device_oneplus_bacon
     DT_PATH: device/$OEM/$DEVICE
-    VT_LINK: https://gitlab.pixelexperience.org/android/vendor-blobs/vendor_xiaomi_miatoll.git
+    VT_LINK: https://github.com/TheMuppets/proprietary_vendor_oneplus
     VT_PATH: vendor/$OEM/$DEVICE
-    KT_LINK: https://github.com/ArrowOS-Devices/android_kernel_xiaomi_sm6250.git
-    PLATFORM: sm6250
-    KT_PATH: kernel/$OEM/$PLATFORM
+    KT_LINK: https://github.com/LineageOS/android_kernel_oppo_msm8974
+    PLATFORM: msm8974
+    KT_PATH: kernel/oppo/$PLATFORM
     TARGET: bacon
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: aosp_"$DEVICE"-userdebug
-    OUTPUT: PixelExperience*.zip
+    LUNCH_COMBO: lineage_$DEVICE-userdebug
+    OUTPUT: lineage*.zip
 
 task:
   name: "Setting Up, Syncing, Building and Uploading..."
@@ -24,18 +25,19 @@ task:
         
   Build-Env-Setup_script:
        - export DEBIAN_FRONTEND=noninteractive
+       - env
        - apt update
        - apt install sudo
        - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
-       - ln -sf /usr/share/zoneinfo/Asia/Kolkata /etc/localtime
+       - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
        - apt-get install -y tzdata
        - dpkg-reconfigure --frontend noninteractive tzdata
        - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang -y
        - sudo apt install python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
-       - git config --global user.name "Sushrut1101"
-       - git config --global user.email "guptasushrut@gmail.com"
-       - git clone https://github.com/akhilnarang/scripts.git ~/scripts
+       - git config --global user.name "wzqj"
+       - git config --global user.email "9105604+wzqj@users.noreply.github.com"
+       - git clone --depth=1 https://github.com/akhilnarang/scripts.git ~/scripts
        - cd ~/scripts
        - sudo bash setup/android_build_env.sh
        - cd ~
@@ -51,8 +53,8 @@ task:
       - echo "============================"
       - mkdir -p ~/work
       - cd ~/work
-      - repo init -u $MANIFEST
-      - repo sync -j31 --force-sync --no-tags --no-clone-bundle
+      - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
+      - repo sync -j31 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
       - git clone $DT_LINK $DT_PATH
       - git clone $VT_LINK $VT_PATH
       - git clone $KT_LINK $KT_PATH
