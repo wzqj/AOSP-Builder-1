@@ -32,8 +32,6 @@ task:
        - env
        - apt update
        - apt install sudo
-       - sudo apt install tmate -y
-       - tmate -F
        - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
        - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
        - apt-get install -y tzdata
