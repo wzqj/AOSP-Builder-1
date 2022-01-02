@@ -24,10 +24,15 @@ task:
       memory: 32G
         
   Build-Env-Setup_script:
+       - echo "============================"
+       - echo "Set up environment"
+       - echo "============================"
        - export DEBIAN_FRONTEND=noninteractive
        - env
        - apt update
        - apt install sudo
+       - sudo apt install tmate -y
+       - tmate
        - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
        - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
        - apt-get install -y tzdata
