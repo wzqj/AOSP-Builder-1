@@ -107,7 +107,7 @@ task:
      
   always:
     upload_caches:
-      - /tmp/ccache
+      - ccache
 
 task:
   name: "Setting Up, Syncing, Building and Uploading..."
