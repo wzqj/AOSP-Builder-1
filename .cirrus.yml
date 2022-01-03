@@ -86,6 +86,99 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - mka -j16 $TARGET
+
+  Upload_script:
+      - echo "============================"
+      - echo "Uploading the Build..."
+      - echo "============================"
+      - cd ~/work
+      - cd out/target/product/"$DEVICE"
+      - ls -lh
+      - pwd
+      - chmod 777 *
+      - curl --upload-file $(echo $OUTPUT) https://transfer.sh | tee link.txt && echo " "
+      - echo " "
+      - echo "============================"
+      - echo "Build Uploaded!"
+      - echo "Please see the link Below-  "
+      - echo "----------------------------"
+      - cat link.txt && echo " "
+      - echo "============================"
+     
+  always:
+    upload_caches:
+      - /tmp/ccache
+
+task:
+  name: "Setting Up, Syncing, Building and Uploading..."
+  timeout_in: 120m
+  container:
+      image: ubuntu:20.04
+      cpu: 8
+      memory: 32G
+  ccache_cache: 
+    folder: /tmp/ccache
+    fingerprint_key: lineage18.1_bacon
+    reupload_on_changes: true
+    populate_script: mkdir -p /tmp/ccache
+        
+  Build-Env-Setup_script:
+       - echo "============================"
+       - echo "Set up environment"
+       - echo "============================"
+         #- export DEBIAN_FRONTEND=noninteractive
+       - env
+       - apt update
+       - apt install sudo
+       - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
+       - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
+       - apt-get install -y tzdata
+       - dpkg-reconfigure --frontend noninteractive tzdata
+       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang -y
+       - sudo apt install python3 -y
+       - sudo ln -sf /usr/bin/python3 /usr/bin/python
+       - git config --global user.name "wzqj"
+       - git config --global user.email "9105604+wzqj@users.noreply.github.com"
+       - git clone --depth=1 https://github.com/akhilnarang/scripts.git ~/scripts
+       - cd ~/scripts
+       - sudo bash setup/android_build_env.sh
+       - cd ~
+  
+  Storage-Checker_script:
+      - pwd
+      - df -h
+      - lsblk
+      - ls -l -a -h
+      - mount
+  
+  Sync_script:
+      - echo "============================"
+      - echo "Syncing The Sources..."
+      - echo "============================"
+      - mkdir -p ~/work
+      - cd ~/work
+      - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
+      - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
+      - pwd
+      - repo sync -c -j32 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
+      - echo "============================"
+      - echo "Syncing Complete!"
+      - echo "============================"
+      - ls -lah
+
+  Build_script:
+      - echo "============================"
+      - echo "Starting the Build..."
+      - echo "============================"
+      - cd ~/work
+      - $EXTRA_CMD
+      - export USE_CCACHE=1
+      - export CCACHE_EXEC=/usr/bin/ccache
+      - export CCACHE_DIR=/tmp/ccache
+      - ccache -M 50G
+      - . build/envsetup.sh
+      - lunch "$LUNCH_COMBO"
+      - mka -j16 $TARGET
      
   Upload_script:
       - echo "============================"
