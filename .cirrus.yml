@@ -18,17 +18,22 @@ env:
 
 task:
   name: "Setting Up, Syncing, Building and Uploading..."
-  timeout_in: 240m  
+  timeout_in: 120m
   container:
       image: ubuntu:20.04
       cpu: 8
       memory: 32G
+  ccache_cache: 
+    folder: /tmp/ccache
+    fingerprint_key: lineage18.1_bacon
+    reupload_on_changes: true
+    populate_script: mkdir -p /tmp/ccache
         
   Build-Env-Setup_script:
        - echo "============================"
        - echo "Set up environment"
        - echo "============================"
-       - export DEBIAN_FRONTEND=noninteractive
+         #- export DEBIAN_FRONTEND=noninteractive
        - env
        - apt update
        - apt install sudo
@@ -47,9 +52,11 @@ task:
        - cd ~
   
   Storage-Checker_script:
+      - pwd
       - df -h
       - lsblk
       - ls -l -a -h
+      - mount
   
   Sync_script:
       - echo "============================"
@@ -64,6 +71,7 @@ task:
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
+      - ls -lah
 
   Build_script:
       - echo "============================"
@@ -73,6 +81,7 @@ task:
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
+      - export CCACHE_DIR=/tmp/ccache
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
