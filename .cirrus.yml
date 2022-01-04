@@ -15,6 +15,7 @@ env:
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
     LUNCH_COMBO: lineage_$DEVICE-userdebug
     OUTPUT: lineage*.zip
+    TMPDIR: /tmp/ramdisk
 
 task:
   name: "build_ccache"
@@ -29,6 +30,8 @@ task:
     reupload_on_changes: true
     populate_script: 
       - mkdir -p /tmp/ccache
+      - echo "ramdisk /tmp/ramdisk tmpfs mode=1777,size=2g" >> /etc/fstab
+      - mount -a
         
   env_script:
        - echo "============================"
