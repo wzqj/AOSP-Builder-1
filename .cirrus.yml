@@ -73,6 +73,13 @@ task:
       - echo "============================"
       - ls -lah
 
+  Storage-Checker_script:
+      - pwd
+      - df -h
+      - lsblk
+      - ls -l -a -h
+      - mount
+
   Build_script:
       - echo "============================"
       - echo "Starting the Build..."
@@ -92,6 +99,13 @@ task:
       - make system-api-stubs-docs || echo no problem
       - make test-api-stubs-docs || echo no problem
 
+  Storage-Checker_script:
+      - pwd
+      - df -h
+      - lsblk
+      - ls -l -a -h
+      - mount
+      
   Upload_script:
       - echo "============================"
       - echo "Uploading the Build..."
