@@ -30,8 +30,8 @@ task:
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script: 
-      - mkdir -p /tmp/ccache
-      - mkdir -p ~/work
+      - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CIRRUS_WORKING_DIR/work
         
   env_script:
        - echo "============================"
@@ -66,8 +66,8 @@ task:
       - echo "============================"
       - echo "Syncing The Sources..."
       - echo "============================"
-      - mkdir -p ~/work
-      - cd ~/work
+      - mkdir -p $CIRRUS_WORKING_DIR/work
+      - cd $CIRRUS_WORKING_DIR/work
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
       - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
       - pwd
@@ -87,11 +87,11 @@ task:
       - echo "============================"
       - echo "Starting the Build..."
       - echo "============================"
-      - cd ~/work
+      - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - export CCACHE_DIR=/tmp/ccache
+      - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
@@ -113,7 +113,7 @@ task:
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - cd ~/work
+      - mkdir -p $CIRRUS_WORKING_DIR/work
       - cd out/target/product/"$DEVICE"
       - ls -lh
       - pwd
@@ -146,8 +146,8 @@ task:
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script:
-      - mkdir -p /tmp/ccache
-      - mkdir -p ~/work
+      - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CIRRUS_WORKING_DIR/work
         
   Build-Env-Setup_script:
        - echo "============================"
@@ -182,8 +182,8 @@ task:
       - echo "============================"
       - echo "Syncing The Sources..."
       - echo "============================"
-      - mkdir -p ~/work
-      - cd ~/work
+      - mkdir -p $CIRRUS_WORKING_DIR/work
+      - cd $CIRRUS_WORKING_DIR/work
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
       - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
       - pwd
@@ -197,11 +197,11 @@ task:
       - echo "============================"
       - echo "Starting the Build..."
       - echo "============================"
-      - cd ~/work
+      - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
-      - export CCACHE_DIR=/tmp/ccache
+      - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
@@ -211,7 +211,7 @@ task:
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - cd ~/work
+      - cd $CIRRUS_WORKING_DIR/work
       - cd out/target/product/"$DEVICE"
       - ls -lh
       - pwd
