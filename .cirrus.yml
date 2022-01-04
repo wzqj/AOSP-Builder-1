@@ -135,17 +135,21 @@ task:
 
 task:
   depends_on: build_ccache
-  name: "Setting Up, Syncing, Building and Uploading..."
+  name: build_rom
   timeout_in: 120m
   container:
       image: ubuntu:20.04
       cpu: 8
       memory: 32G
   ccache_cache: 
-    folder: /tmp/ccache
+    folders:
+      - ccache
+      - work
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
-    populate_script: mkdir -p /tmp/ccache
+    populate_script:
+      - mkdir -p /tmp/ccache
+      - mkdir -p ~/work
         
   Build-Env-Setup_script:
        - echo "============================"
