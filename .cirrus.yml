@@ -85,7 +85,12 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-      - mka -j16 $TARGET
+        #      - mka -j16 $TARGET
+      - 
+      - make api-stubs-docs || echo no problem
+      - make hiddenapi-lists-docs || echo no problem
+      - make system-api-stubs-docs || echo no problem
+      - make test-api-stubs-docs || echo no problem
 
   Upload_script:
       - echo "============================"
