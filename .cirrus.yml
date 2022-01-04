@@ -17,7 +17,7 @@ env:
     OUTPUT: lineage*.zip
 
 task:
-  name: "Setting Up, Syncing, Building and Uploading..."
+  name: "build_ccache"
   timeout_in: 120m
   container:
       image: ubuntu:20.04
@@ -86,7 +86,7 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
         #      - mka -j16 $TARGET
-      - 
+      - mmm frameworks/base
       - make api-stubs-docs || echo no problem
       - make hiddenapi-lists-docs || echo no problem
       - make system-api-stubs-docs || echo no problem
@@ -115,6 +115,7 @@ task:
       - ccache
 
 task:
+  depends_on: build_ccache
   name: "Setting Up, Syncing, Building and Uploading..."
   timeout_in: 120m
   container:
