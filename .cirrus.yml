@@ -56,7 +56,6 @@ task:
       - df -h
       - lsblk
       - ls -l -a -h
-      - mount
   
   Sync_script:
       - echo "============================"
@@ -78,7 +77,6 @@ task:
       - df -h
       - lsblk
       - ls -l -a -h
-      - mount
 
   Build_script:
       - echo "============================"
@@ -93,18 +91,17 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
         #      - mka -j16 $TARGET
-      - mmm frameworks/base
-      - make api-stubs-docs || echo no problem
-      - make hiddenapi-lists-docs || echo no problem
-      - make system-api-stubs-docs || echo no problem
-      - make test-api-stubs-docs || echo no problem
+      - mmm -j16 frameworks/base
+      - make -j16 api-stubs-docs || echo no problem
+      - make -j16 hiddenapi-lists-docs || echo no problem
+      - make -j16 system-api-stubs-docs || echo no problem
+      - make -j16 test-api-stubs-docs || echo no problem
 
   Storage-Checker_script:
       - pwd
       - df -h
       - lsblk
       - ls -l -a -h
-      - mount
       
   Upload_script:
       - echo "============================"
