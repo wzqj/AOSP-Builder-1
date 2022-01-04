@@ -51,7 +51,7 @@ task:
        - sudo bash setup/android_build_env.sh
        - cd ~
   
-  Storage-Checker_script:
+  check_space_script:
       - pwd
       - df -h
       - lsblk
@@ -72,7 +72,7 @@ task:
       - echo "============================"
       - ls -lah
 
-  Storage-Checker_script:
+  check_space_after_sync_script:
       - pwd
       - df -h
       - lsblk
@@ -97,7 +97,7 @@ task:
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
 
-  Storage-Checker_script:
+  check_space_after_ccache_build_script:
       - pwd
       - df -h
       - lsblk
