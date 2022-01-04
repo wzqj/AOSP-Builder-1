@@ -37,8 +37,7 @@ task:
        - echo "============================"
        - echo "Set up environment"
        - echo "============================"
-         #- export DEBIAN_FRONTEND=noninteractive
-       - env
+       - export DEBIAN_FRONTEND=noninteractive
        - apt update
        - apt install sudo
        - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
@@ -56,6 +55,7 @@ task:
        - cd ~
   
   check_space_script:
+      - env
       - pwd
       - df -h
       - lsblk
