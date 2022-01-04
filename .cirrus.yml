@@ -29,7 +29,7 @@ task:
     reupload_on_changes: true
     populate_script: mkdir -p /tmp/ccache
         
-  Build-Env-Setup_script:
+  env_script:
        - echo "============================"
        - echo "Set up environment"
        - echo "============================"
@@ -57,7 +57,7 @@ task:
       - lsblk
       - ls -l -a -h
   
-  Sync_script:
+  sync_script:
       - echo "============================"
       - echo "Syncing The Sources..."
       - echo "============================"
@@ -78,7 +78,7 @@ task:
       - lsblk
       - ls -l -a -h
 
-  Build_script:
+  build_ccache_script:
       - echo "============================"
       - echo "Starting the Build..."
       - echo "============================"
@@ -91,11 +91,11 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
         #      - mka -j16 $TARGET
-      - mmm -j16 frameworks/base
-      - make -j16 api-stubs-docs || echo no problem
-      - make -j16 hiddenapi-lists-docs || echo no problem
-      - make -j16 system-api-stubs-docs || echo no problem
-      - make -j16 test-api-stubs-docs || echo no problem
+      - mmm -j16 frameworks/base/[abcdefghijklmn]*
+        #      - make -j16 api-stubs-docs || echo no problem
+        #      - make -j16 hiddenapi-lists-docs || echo no problem
+        #      - make -j16 system-api-stubs-docs || echo no problem
+        #      - make -j16 test-api-stubs-docs || echo no problem
 
   check_space_after_ccache_build_script:
       - pwd
