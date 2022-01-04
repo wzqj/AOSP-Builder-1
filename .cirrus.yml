@@ -96,7 +96,7 @@ task:
         #      - mka -j16 $TARGET
       - make modules
       - echo frameworks/base/[abcdefghijkl]*
-      - mmm -j16 frameworks/base/[abcdefghijkl]*
+      - mmm -j16 frameworks/base/[abcdefghijkl]*/
         #      - make -j16 api-stubs-docs || echo no problem
         #      - make -j16 hiddenapi-lists-docs || echo no problem
         #      - make -j16 system-api-stubs-docs || echo no problem
