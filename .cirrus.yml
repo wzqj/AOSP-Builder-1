@@ -94,6 +94,7 @@ task:
       - lunch "$LUNCH_COMBO"
       - allmod # print all module names
         #      - mka -j16 $TARGET
+      - make modules
       - echo frameworks/base/[abcdefghijkl]*
       - mmm -j16 frameworks/base/[abcdefghijkl]*
         #      - make -j16 api-stubs-docs || echo no problem
