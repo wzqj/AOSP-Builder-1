@@ -27,7 +27,8 @@ task:
     folder: /tmp/ccache
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
-    populate_script: mkdir -p /tmp/ccache
+    populate_script: 
+      - mkdir -p /tmp/ccache
         
   env_script:
        - echo "============================"
@@ -56,6 +57,7 @@ task:
       - df -h
       - lsblk
       - ls -l -a -h
+      - mount
   
   sync_script:
       - echo "============================"
@@ -90,6 +92,7 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
+      - allmod # print all module names
         #      - mka -j16 $TARGET
       - mmm -j16 frameworks/base/[abcdefghijklmn]*
         #      - make -j16 api-stubs-docs || echo no problem
