@@ -90,6 +90,7 @@ task:
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
       - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
+      - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
@@ -201,6 +202,7 @@ task:
       - export USE_CCACHE=1
       - export CCACHE_EXEC=/usr/bin/ccache
       - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
+      - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
