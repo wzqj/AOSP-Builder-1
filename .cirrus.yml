@@ -93,9 +93,11 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-        #      - mka -j16 $TARGET
-      - echo frameworks/base/[abcdefghijkl]*
-      - mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
+      - mka -j16 $TARGET &
+      - sleep 88m
+      - kill %1
+      - ccache -s
+        #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
         #      - make -j16 api-stubs-docs || echo no problem
         #      - make -j16 hiddenapi-lists-docs || echo no problem
         #      - make -j16 system-api-stubs-docs || echo no problem
@@ -106,6 +108,7 @@ task:
       - df -h
       - lsblk
       - ls -l -a -h
+      - ccache -s
       
   Upload_script:
     #      - echo "============================"
@@ -183,7 +186,7 @@ task:
       - repo init --depth=1 --no-repo-verify -u $MANIFEST -g default,-mips,-darwin,-notdefault
       - git clone $LOCAL_MANIFEST --depth=1 -b main .repo/local_manifests
       - pwd
-      - repo sync -c -j32 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
+      - repo sync -c -j16 --force-sync --no-tags --no-clone-bundle --optimized-fetch --prune
       - echo "============================"
       - echo "Syncing Complete!"
       - echo "============================"
@@ -202,6 +205,7 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - mka -j16 $TARGET
+      - ccache -s
      
   Upload_script:
       - echo "============================"
