@@ -26,12 +26,10 @@ task:
   ccache_cache: 
     folders:
       - ccache
-      - work
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script: 
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - mkdir -p $CIRRUS_WORKING_DIR/work
         
   env_script:
        - echo "============================"
@@ -142,12 +140,10 @@ task:
   ccache_cache: 
     folders:
       - ccache
-      - work
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script:
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - mkdir -p $CIRRUS_WORKING_DIR/work
         
   Build-Env-Setup_script:
        - echo "============================"
