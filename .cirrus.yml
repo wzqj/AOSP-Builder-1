@@ -16,7 +16,7 @@ env:
     LUNCH_COMBO: lineage_$DEVICE-userdebug
     OUTPUT: lineage*.zip
     RCLONE: "ENCRYPTED[537e90d48f2376b657c0271ae5b574cb5acd85a42d97e1154b33d3e09306d80efcfd93267277ad55538c0421108f1afb]"
-    CCACHE_URL: https://roms.wzqj.workers.dev/ccache/ccache.tar.gz
+    CCACHE_URL: ""
 
 task:
   name: "build_ccache"
