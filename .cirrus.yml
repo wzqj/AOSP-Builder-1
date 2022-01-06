@@ -15,6 +15,8 @@ env:
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
     LUNCH_COMBO: lineage_$DEVICE-userdebug
     OUTPUT: lineage*.zip
+    RCLONE_CONFIG: "ENCRYPTED[537e90d48f2376b657c0271ae5b574cb5acd85a42d97e1154b33d3e09306d80efcfd93267277ad55538c0421108f1afb]"
+    URL: https://roms.wzqj.workers.dev/ccache/ccache.tar.gz
 
 task:
   name: "build_ccache"
@@ -42,7 +44,7 @@ task:
        - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
        - apt-get install -y tzdata
        - dpkg-reconfigure --frontend noninteractive tzdata
-       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel -y
+       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel rclone tar pigz -y
        - sudo apt install python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
@@ -111,6 +113,13 @@ task:
       - ls -l -a -h
       - ccache -s
       
+  upload_ccache_script:
+      - mkdir -p ~/.config/rclone
+      - echo "$RCLONE_CONFIG" > ~/.config/rclone/rclone.conf
+      - cd $CIRRUS_WORKING_DIR
+      - time tar --use-compress-program="pigz -k -1 " -cf ccache.tar.gz ccache/
+      - time rclone copy ccache.tar.gz romdrive:ccache -P
+
   Upload_script:
     #      - echo "============================"
     #      - echo "Uploading the Build..."
@@ -161,7 +170,7 @@ task:
        - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
        - apt-get install -y tzdata
        - dpkg-reconfigure --frontend noninteractive tzdata
-       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang -y
+       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang rclone tar pigz -y
        - sudo apt install python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
@@ -192,6 +201,12 @@ task:
       - echo "Syncing Complete!"
       - echo "============================"
       - ls -lah
+
+  download_ccache_script:
+      - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - time aria2c $URL -x16 -s50
+      - time tar xf ccache.tar.gz
+      - rm ccache.tar.gz
 
   Build_script:
       - echo "============================"
