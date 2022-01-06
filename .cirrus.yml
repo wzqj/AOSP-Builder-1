@@ -16,7 +16,6 @@ env:
     LUNCH_COMBO: lineage_$DEVICE-userdebug
     OUTPUT: lineage*.zip
     RCLONE_CONFIG: "ENCRYPTED[537e90d48f2376b657c0271ae5b574cb5acd85a42d97e1154b33d3e09306d80efcfd93267277ad55538c0421108f1afb]"
-    URL: https://bit.ly/3t0zWtK
 
 task:
   name: "build_ccache"
@@ -27,11 +26,12 @@ task:
       memory: 32G
   ccache_cache: 
     folders:
-      - ccache
+      - ccache_url
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script: 
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CIRRUS_WORKING_DIR/ccache_url
         
   env_script:
        - echo "============================"
@@ -119,6 +119,8 @@ task:
       - cd $CIRRUS_WORKING_DIR
       - time tar --use-compress-program="pigz -k -1 " -cf ccache.tar.gz ccache/
       - time rclone copy ccache.tar.gz romdrive:ccache -P
+      - cd ccache_url/
+      - if [ ! -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then curl --upload-file ../ccache.tar.gz https://transfer.sh | tee ccache_url.txt; else curl $(cat ccache_url.txt) -o test.txt; fi
 
   Upload_script:
     #      - echo "============================"
@@ -152,11 +154,12 @@ task:
       memory: 32G
   ccache_cache: 
     folders:
-      - ccache
+      - ccache_url
     fingerprint_key: lineage18.1_bacon
     reupload_on_changes: true
     populate_script:
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CIRRUS_WORKING_DIR/ccache_url
         
   Build-Env-Setup_script:
        - echo "============================"
@@ -204,8 +207,8 @@ task:
 
   download_ccache_script:
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - time aria2c $URL -x16 -s50
-      - time tar xf ccache.tar.gz
+      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then time aria2c $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt -x16 -s50; fi
+      - time tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR/ccache/
       - rm ccache.tar.gz
 
   Build_script:
