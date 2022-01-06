@@ -114,9 +114,10 @@ task:
       
   upload_ccache_script:
       - cd $CIRRUS_WORKING_DIR
+      - sync
       - tar --use-compress-program="pigz -k -1 " -cf ccache.tar.gz ccache/
       - cd ccache_url/
-      - if [ ! -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then curl --upload-file ../ccache.tar.gz https://transfer.sh | tee ccache_url.txt; else curl $(cat ccache_url.txt) -o test.txt; fi
+      - if [ ! -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt; fi
 
   Upload_script:
     #      - echo "============================"
@@ -138,7 +139,7 @@ task:
      
   always:
     upload_caches:
-      - ccache
+      - ccache_url
 
 task:
   depends_on: build_ccache
