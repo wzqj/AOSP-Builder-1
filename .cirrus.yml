@@ -26,7 +26,7 @@ task:
   ccache_cache: 
     folders:
       - ccache_url
-    fingerprint_key: lineage18.1_bacon
+    fingerprint_key: bacon_lineage18.1
     reupload_on_changes: true
     populate_script: 
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
@@ -115,7 +115,7 @@ task:
   upload_ccache_script:
       - cd $CIRRUS_WORKING_DIR
       - sync
-      - tar --use-compress-program="pigz -k -1 " -cf ccache.tar.gz ccache/
+      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/
       - cd ccache_url/
       - if [ ! -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt; fi
 
@@ -152,7 +152,7 @@ task:
   ccache_cache: 
     folders:
       - ccache_url
-    fingerprint_key: lineage18.1_bacon
+    fingerprint_key: bacon_lineage18.1
     reupload_on_changes: true
     populate_script:
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
