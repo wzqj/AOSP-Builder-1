@@ -230,8 +230,18 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
-      - mka -j16 $TARGET
+      - mka -j16 $TARGET &
+      - sleep 85m
+      - kill %1
       - ccache -s
+
+  upload_ccache_script:
+      - cd $CIRRUS_WORKING_DIR
+      - sync
+      - sleep 10
+      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/
+      - cd ccache_url/
+      - if [ ! -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt; fi
      
   Upload_script:
       - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
