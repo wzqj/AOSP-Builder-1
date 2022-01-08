@@ -205,7 +205,7 @@ task:
 
   download_ccache_script:
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then aria2c $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt) -x16 -s50; fi
+      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then wget $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt); fi
       - tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR/ccache/
       - rm ccache.tar.gz
 
