@@ -20,7 +20,7 @@ task:
   name: "build_ccache"
   timeout_in: 120m
   container:
-      image: ubuntu:20.04
+      image: fr3akyphantom/droid-builder:focal
       cpu: 8
       memory: 32G
   ccache_cache: 
@@ -155,7 +155,7 @@ task:
   name: build_rom
   timeout_in: 120m
   container:
-      image: ubuntu:20.04
+      image: fr3akyphantom/droid-builder:focal
       cpu: 8
       memory: 32G
   ccache_cache: 
