@@ -65,6 +65,7 @@ task:
       - mount
   
   download_ccache_background_script:
+      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt; fi
       - sleep 5m
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
       - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then aria2c -s16 -x16 $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
@@ -203,6 +204,7 @@ task:
       - mount
   
   download_ccache_background_script:
+      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt; fi
       - sleep 5m
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
       - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then aria2c -s16 -x16 $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
