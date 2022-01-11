@@ -99,6 +99,7 @@ task:
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
       - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv | tee ccache_url.txt
+      - cat ccache_url.txt
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
@@ -137,13 +138,12 @@ task:
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - mkdir -p $CIRRUS_WORKING_DIR/work
-      - cd out/target/product/"$DEVICE"
       - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - ls -lh
       - pwd
       - chmod 777 *
-      - curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
+        #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
+      - wget --method PUT --body-file=out.tar https://transfer.sh/out.tar -O - -nv | tee link.txt
       - echo " "
       - echo "============================"
       - echo "Build Uploaded!"
@@ -233,6 +233,7 @@ task:
       - cd ccache_url/
       - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv | tee ccache_url.txt
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+      - cat ccache_url.txt
      
   Build_script:
       - echo "============================"
@@ -258,13 +259,12 @@ task:
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - mkdir -p $CIRRUS_WORKING_DIR/work
-      - cd out/target/product/"$DEVICE"
       - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - ls -lh
       - pwd
       - chmod 777 *
-      - curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
+        #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
+      - wget --method PUT --body-file=out.tar https://transfer.sh/out.tar -O - -nv | tee link.txt
       - echo " "
       - echo "============================"
       - echo "Build Uploaded!"
