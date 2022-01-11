@@ -15,6 +15,9 @@ env:
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
     LUNCH_COMBO: lineage_$DEVICE-userdebug
     OUTPUT: lineage*.zip
+    USE_CCACHE: 1
+    CCACHE_EXEC: /usr/bin/ccache
+    CCACHE_DIR: $CIRRUS_WORKING_DIR/ccache
 
 task:
   name: "build_ccache"
@@ -103,9 +106,9 @@ task:
       - echo "============================"
       - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
-      - export USE_CCACHE=1
-      - export CCACHE_EXEC=/usr/bin/ccache
-      - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
+        #- export USE_CCACHE=1
+        #- export CCACHE_EXEC=/usr/bin/ccache
+        #- export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
@@ -235,9 +238,9 @@ task:
       - echo "============================"
       - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
-      - export USE_CCACHE=1
-      - export CCACHE_EXEC=/usr/bin/ccache
-      - export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
+        #- export USE_CCACHE=1
+        #- export CCACHE_EXEC=/usr/bin/ccache
+        #- export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
