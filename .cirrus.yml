@@ -124,7 +124,8 @@ task:
       - sleep 10
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv | tee ccache_url.txt
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
 
   Upload_script:
       - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
@@ -243,7 +244,8 @@ task:
       - sleep 10
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv | tee ccache_url.txt
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
      
   Upload_script:
       - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
