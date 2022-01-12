@@ -67,6 +67,7 @@ task:
       - mount
   
   download_ccache_background_script:
+      - echo "https://transfer.sh/LqxuFr/ccache.tar.gz" > $CCACHE_URL_FILE
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CCACHE_DIR
