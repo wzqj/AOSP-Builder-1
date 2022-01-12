@@ -18,6 +18,7 @@ env:
     USE_CCACHE: 1
     CCACHE_EXEC: /usr/bin/ccache
     CCACHE_DIR: $CIRRUS_WORKING_DIR/ccache
+    CCACHE_URL_FILE: $CCACHE_URL_FILE
 
 task:
   name: "build_ccache"
@@ -65,10 +66,10 @@ task:
       - mount
   
   download_ccache_background_script:
-      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt; fi
+      - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then aria2c -s16 -x16 $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
+      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
 
   sync_script:
       - echo "============================"
@@ -206,10 +207,10 @@ task:
       - mount
   
   download_ccache_background_script:
-      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt; fi
+      - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - if [ -f $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt ]; then aria2c -s16 -x16 $(cat $CIRRUS_WORKING_DIR/ccache_url/ccache_url.txt); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
+      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
 
   Sync_script:
       - echo "============================"
