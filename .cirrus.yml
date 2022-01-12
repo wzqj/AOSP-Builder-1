@@ -1,5 +1,6 @@
 env:
     CIRRUS_CLONE_DEPTH: 1
+    CIRRUS_LOG_TIMESTAMP: true
     MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1
     DEVICE: bacon
     OEM: oneplus
