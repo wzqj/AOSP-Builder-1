@@ -143,7 +143,7 @@ task:
       - echo "Uploading the Build..."
       - echo "============================"
       - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - ls -lh
+      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - pwd
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
@@ -266,7 +266,7 @@ task:
       - echo "Uploading the Build..."
       - echo "============================"
       - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - ls -lh
+      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - pwd
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
