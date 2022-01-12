@@ -18,7 +18,8 @@ env:
     USE_CCACHE: 1
     CCACHE_EXEC: /usr/bin/ccache
     CCACHE_DIR: $CIRRUS_WORKING_DIR/ccache
-    CCACHE_URL_FILE: $CCACHE_URL_FILE
+    CCACHE_URL_DIR: $CIRRUS_WORKING_DIR/ccache_url
+    CCACHE_URL_FILE: $CCACHE_URL_DIR/ccache_url.txt
 
 task:
   name: "build_ccache"
@@ -33,8 +34,8 @@ task:
     fingerprint_key: bacon_lineage18.1
     reupload_on_changes: true
     populate_script: 
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache_url
+      - mkdir -p $CCACHE_DIR
+      - mkdir -p $CCACHE_URL_DIR
         
   env_script:
        - echo "============================"
@@ -68,7 +69,7 @@ task:
   download_ccache_background_script:
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CCACHE_DIR
       - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
 
   sync_script:
@@ -110,9 +111,6 @@ task:
       - echo "============================"
       - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
-        #- export USE_CCACHE=1
-        #- export CCACHE_EXEC=/usr/bin/ccache
-        #- export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
@@ -174,8 +172,8 @@ task:
     fingerprint_key: bacon_lineage18.1
     reupload_on_changes: true
     populate_script:
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache_url
+      - mkdir -p $CCACHE_DIR
+      - mkdir -p $CCACHE_URL_DIR
         
   Build-Env-Setup_script:
        - echo "============================"
@@ -209,7 +207,7 @@ task:
   download_ccache_background_script:
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
-      - mkdir -p $CIRRUS_WORKING_DIR/ccache
+      - mkdir -p $CCACHE_DIR
       - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
 
   Sync_script:
@@ -244,9 +242,6 @@ task:
       - echo "============================"
       - cd $CIRRUS_WORKING_DIR/work
       - $EXTRA_CMD
-        #- export USE_CCACHE=1
-        #- export CCACHE_EXEC=/usr/bin/ccache
-        #- export CCACHE_DIR=$CIRRUS_WORKING_DIR/ccache
       - ccache -o compression=true
       - ccache -M 50G
       - . build/envsetup.sh
