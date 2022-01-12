@@ -139,19 +139,23 @@ task:
       
   Upload_script:
       - cat $CCACHE_URL_FILE
-      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
+        #      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
       - then
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+        #- tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - pwd
       - ls -lah
       - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+      - cd $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - du --max-depth=1 -h $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
-      - wget --method PUT --body-file=out.tar https://transfer.sh/out.tar -O - -nv | tee link.txt
+      - for file in *;
+      - do wget --method PUT --body-file=$file https://transfer.sh/$file -O - -nv | tee link.txt & 
+      - done
+      - wait -f
       - echo " "
       - echo "============================"
       - echo "Build Uploaded!"
