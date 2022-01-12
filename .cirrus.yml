@@ -146,8 +146,10 @@ task:
       - echo "Uploading the Build..."
       - echo "============================"
       - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - pwd
+      - ls -lah
+      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+      - du --max-depth=1 -h $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
       - wget --method PUT --body-file=out.tar https://transfer.sh/out.tar -O - -nv | tee link.txt
