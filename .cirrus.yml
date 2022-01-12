@@ -99,7 +99,6 @@ task:
       - sleep 80m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
-      - sleep 10
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
       - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv > ccache_url.txt || wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv > ccache_url.txt
@@ -122,7 +121,7 @@ task:
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
-      - sleep 75m
+      - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
       - ccache -s
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
