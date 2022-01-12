@@ -250,8 +250,12 @@ task:
       - ccache -M 50G
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
+      - make -j16 api-stubs-docs || echo no problem
+      - make -j16 hiddenapi-lists-docs || echo no problem
+      - make -j16 system-api-stubs-docs || echo no problem
+      - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
-      - sleep 80m
+      - sleep 75m
       - kill %1
       - ccache -s
 
