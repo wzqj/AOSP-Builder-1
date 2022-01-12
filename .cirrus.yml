@@ -26,7 +26,7 @@ task:
   name: "build_ccache"
   timeout_in: 120m
   container:
-      image: fr3akyphantom/droid-builder:focal
+      image: ubuntu:20.04
       cpu: 8
       memory: 32G
   ccache_cache: 
