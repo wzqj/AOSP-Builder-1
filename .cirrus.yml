@@ -140,7 +140,7 @@ task:
   Upload_script:
       - cat $CCACHE_URL_FILE
         #      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
-      - then
+        #      - then
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
