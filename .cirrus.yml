@@ -95,18 +95,6 @@ task:
       - lsblk
       - ls -l -a -h
 
-  upload_ccache_background_script:
-      - sleep 75m #waits for ~15m docs build times, then the rest
-      - cd $CIRRUS_WORKING_DIR
-      - sync
-      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
-      - cd ccache_url/
-      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
-      - wait -f
-      - ls -lah
-      - cat ccache_url.txt
-        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
-
   build_ccache_script:
       - echo "============================"
       - echo "Starting the Build..."
@@ -127,6 +115,18 @@ task:
       - wait -f
       - ccache -s
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
+
+  upload_ccache_script:
+    #- sleep 75m #waits for ~15m docs build times, then the rest
+      - cd $CIRRUS_WORKING_DIR
+      - sync
+      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
+      - cd ccache_url/
+      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
+      - wait -f
+      - ls -lah
+      - cat ccache_url.txt
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
 
   always:
     upload_caches:
