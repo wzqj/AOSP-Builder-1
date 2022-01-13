@@ -96,7 +96,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
-      - sleep 80m #waits for ~15m docs build times, then the rest
+      - sleep 75m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
@@ -124,6 +124,7 @@ task:
       - mka -j16 $TARGET &
       - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
+      - wait -f
       - ccache -s
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
 
@@ -153,7 +154,7 @@ task:
       - du --max-depth=1 -h $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
-      - for file in *;
+      - for file in recovery.img lineage-18.1*;
       - do wget --method PUT --body-file=$file https://transfer.sh/$file -O - -nv | tee link.txt & 
       - done
       - wait -f
