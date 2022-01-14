@@ -101,7 +101,7 @@ task:
       - sync
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
       - wait -f
       - ls -lah
       - cat ccache_url.txt
