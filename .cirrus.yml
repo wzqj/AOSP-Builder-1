@@ -44,7 +44,7 @@ task:
        - echo "============================"
        - export DEBIAN_FRONTEND=noninteractive
        - apt update
-       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz fontconfig ttf-dejavu python3 -y
+       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz lbzip2 fontconfig ttf-dejavu python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
        - git config --global user.email "9105604+wzqj@users.noreply.github.com"
@@ -62,11 +62,11 @@ task:
       - mount
   
   download_ccache_background_script:
-      - echo "https://transfer.sh/LqxuFr/ccache.tar.gz" > $CCACHE_URL_FILE
+      - echo "https://transfer.sh/LqxuFr/ccache.tar.bz2" > $CCACHE_URL_FILE
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CCACHE_DIR
-      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
+      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.bz2 --directory $CIRRUS_WORKING_DIR; rm ccache.tar.bz2; fi
 
   sync_script:
       - echo "============================"
@@ -93,13 +93,13 @@ task:
       - sleep 75m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
-      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
+      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - wait -f
       - ls -lah
       - cat ccache_url.txt
-        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
       - echo "============================"
@@ -203,11 +203,11 @@ task:
       - mount
   
   download_ccache_background_script:
-    #- echo "https://transfer.sh/LqxuFr/ccache.tar.gz" > $CCACHE_URL_FILE
+    #- echo "https://transfer.sh/LqxuFr/ccache.tar.bz2" > $CCACHE_URL_FILE
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CCACHE_DIR
-      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
+      - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.bz2 --directory $CIRRUS_WORKING_DIR; rm ccache.tar.bz2; fi
 
   sync_script:
       - echo "============================"
@@ -234,13 +234,13 @@ task:
       - sleep 75m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
-      - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
+      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - wait -f
       - ls -lah
       - cat ccache_url.txt
-        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
       - echo "============================"
