@@ -37,7 +37,7 @@ task:
     populate_script: 
       - mkdir -p $CCACHE_DIR
       - mkdir -p $CCACHE_URL_DIR
-        
+
   env_script:
        - echo "============================"
        - echo "Set up environment"
@@ -132,7 +132,7 @@ task:
       - lsblk
       - ls -l -a -h
       - ccache -s
-      
+        
   Upload_script:
       - cat $CCACHE_URL_FILE
         #      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
@@ -178,21 +178,14 @@ task:
     populate_script:
       - mkdir -p $CCACHE_DIR
       - mkdir -p $CCACHE_URL_DIR
-        
-  Build-Env-Setup_script:
+
+  env_script:
        - echo "============================"
        - echo "Set up environment"
        - echo "============================"
        - export DEBIAN_FRONTEND=noninteractive
-       - env
        - apt update
-       - apt install sudo
-       - DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends tzdata
-       - ln -sf /usr/share/zoneinfo/Canada/Pacific /etc/localtime
-       - apt-get install -y tzdata
-       - dpkg-reconfigure --frontend noninteractive tzdata
-       - sudo apt update -y && sudo apt install git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz fontconfig ttf-dejavu -y
-       - sudo apt install python3 -y
+       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz fontconfig ttf-dejavu python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
        - git config --global user.email "9105604+wzqj@users.noreply.github.com"
@@ -201,7 +194,8 @@ task:
        - sudo bash setup/android_build_env.sh
        - cd ~
   
-  Storage-Checker_script:
+  check_space_script:
+      - env
       - pwd
       - df -h
       - lsblk
@@ -209,12 +203,13 @@ task:
       - mount
   
   download_ccache_background_script:
+    #- echo "https://transfer.sh/LqxuFr/ccache.tar.gz" > $CCACHE_URL_FILE
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
       - sleep 5m
       - mkdir -p $CCACHE_DIR
       - if [ -f $CCACHE_URL_FILE ]; then aria2c -s16 -x16 $(cat $CCACHE_URL_FILE); tar xf ccache.tar.gz --directory $CIRRUS_WORKING_DIR; rm ccache.tar.gz; fi
 
-  Sync_script:
+  sync_script:
       - echo "============================"
       - echo "Syncing The Sources..."
       - echo "============================"
@@ -229,18 +224,25 @@ task:
       - echo "============================"
       - ls -lah
 
+  check_space_after_sync_script:
+      - pwd
+      - df -h
+      - lsblk
+      - ls -l -a -h
+
   upload_ccache_background_script:
-      - sleep 80m #waits for ~15m docs build times, then the rest
+      - sleep 75m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
-      - sleep 10
       - tar --use-compress-program="pigz -k -1" -cf ccache.tar.gz ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv > ccache_url.txt || wget --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - -nv > ccache_url.txt
-        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh/ccache.tar.gz -O - > ccache_url.txt
+      - wait -f
+      - ls -lah
       - cat ccache_url.txt
-     
-  Build_script:
+        #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.gz https://transfer.sh | tee ccache_url.txt
+
+  build_ccache_script:
       - echo "============================"
       - echo "Starting the Build..."
       - echo "============================"
@@ -255,27 +257,42 @@ task:
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
-      - sleep 75m
+      - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
+      - wait -f
       - ccache -s
+        #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
 
   always:
     upload_caches:
       - ccache
 
+  check_space_after_ccache_build_script:
+      - pwd
+      - df -h
+      - lsblk
+      - ls -l -a -h
+      - ccache -s
+
   Upload_script:
       - cat $CCACHE_URL_FILE
-      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
-      - then
+        #      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
+        #      - then
       - echo "============================"
       - echo "Uploading the Build..."
       - echo "============================"
-      - tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+        #- tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - pwd
+      - ls -lah
+      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+      - cd $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
+      - du --max-depth=1 -h $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
       - chmod 777 *
         #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
-      - wget --method PUT --body-file=out.tar https://transfer.sh/out.tar -O - -nv | tee link.txt
+      - for file in recovery.img lineage-18.1*;
+      - do wget --method PUT --body-file=$file https://transfer.sh/$file -O - -nv | tee link.txt & 
+      - done
+      - wait -f
       - echo " "
       - echo "============================"
       - echo "Build Uploaded!"
@@ -283,5 +300,4 @@ task:
       - echo "----------------------------"
       - cat link.txt && echo " "
       - echo "============================"
-      - fi
-
+        #- fi
