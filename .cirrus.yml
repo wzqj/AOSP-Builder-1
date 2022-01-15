@@ -91,14 +91,6 @@ task:
 
   upload_ccache_background_script:
       - sleep 75m #waits for ~15m docs build times, then the rest
-      - cd $CIRRUS_WORKING_DIR
-      - sync
-      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
-      - cd ccache_url/
-      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
-      - ls -lah
-      - cat ccache_url.txt
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
@@ -118,8 +110,15 @@ task:
       - mka -j16 $TARGET &
       - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
-      - wait -f
       - ccache -s
+      - cd $CIRRUS_WORKING_DIR
+      - sync
+      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
+      - cd ccache_url/
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
+      - wait -f
+      - ls -lah
+      - cat ccache_url.txt
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
 
   always:
@@ -232,14 +231,6 @@ task:
 
   upload_ccache_background_script:
       - sleep 75m #waits for ~15m docs build times, then the rest
-      - cd $CIRRUS_WORKING_DIR
-      - sync
-      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
-      - cd ccache_url/
-      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
-      - ls -lah
-      - cat ccache_url.txt
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
@@ -259,8 +250,15 @@ task:
       - mka -j16 $TARGET &
       - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
-      - wait -f
       - ccache -s
+      - cd $CIRRUS_WORKING_DIR
+      - sync
+      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
+      - cd ccache_url/
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
+      - wait -f
+      - ls -lah
+      - cat ccache_url.txt
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
 
   always:
