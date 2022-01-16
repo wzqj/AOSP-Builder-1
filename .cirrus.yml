@@ -109,6 +109,7 @@ task:
       - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
       - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
+      - jobs
       - kill %1
       - ccache -s
       - cd $CIRRUS_WORKING_DIR
@@ -116,7 +117,7 @@ task:
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
       - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
+      - wait
       - ls -lah
       - cat ccache_url.txt
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
@@ -249,6 +250,7 @@ task:
       - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
       - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
+      - jobs
       - kill %1
       - ccache -s
       - cd $CIRRUS_WORKING_DIR
@@ -256,7 +258,7 @@ task:
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
       - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
+      - wait
       - ls -lah
       - cat ccache_url.txt
         #- mmm -j16 frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs
