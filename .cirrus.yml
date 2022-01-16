@@ -90,7 +90,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
-      - sleep 75m #waits for ~15m docs build times, then the rest
+    #      - sleep 75m #waits for ~15m docs build times, then the rest
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
@@ -231,7 +231,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
-      - sleep 75m #waits for ~15m docs build times, then the rest
+    #- sleep 75m #waits for ~15m docs build times, then the rest
         #- curl --upload-file $CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh | tee ccache_url.txt
 
   build_ccache_script:
