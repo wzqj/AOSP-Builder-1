@@ -90,6 +90,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
+      - if [ -f $CCACHE_URL_FILE ]; then cp $CCACHE_URL_FILE $CCACHE_URL_DIR/ccache_url.bak; fi
       - sleep 75m #waits for ~15m docs build times, then the rest
       - cd $CIRRUS_WORKING_DIR
       - sync
@@ -127,6 +128,11 @@ task:
       - cat ccache_url.txt
 
   always:
+    check_empty_ccache_url_script:
+      - if [ ! $(ls -s ccache_url.txt | cut --delimiter=" " --fields 1) -eq 0 ]
+      - then
+      - cp $CCACHE_URL_DIR/ccache_url.bak $CCACHE_URL_FILE
+      - fi
     upload_caches:
       - ccache
 
