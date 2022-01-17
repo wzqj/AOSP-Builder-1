@@ -125,7 +125,6 @@ task:
       - ccache -s
       - wait
       - ls -lah
-      - cat ccache_url.txt
 
   always:
     check_empty_ccache_url_script:
