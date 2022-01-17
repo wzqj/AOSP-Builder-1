@@ -108,9 +108,12 @@ task:
       - mka -j16 $TARGET &
         #- mmm -j16 external/ hardware/ frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs system/ &
       - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
+      - ps af
       - jobs
       - kill %1
       - sleep 1
+      - jobs
+      - kill $(ps af | grep mka | cut --delimiter=" "  --fields 2)
       - jobs
       - kill -9 %1
       - jobs
