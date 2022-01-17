@@ -111,11 +111,11 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - make -j16 api-stubs-docs || echo no problem
-      - make -j16 hiddenapi-lists-docs || echo no problem
+        #- make -j16 hiddenapi-lists-docs || echo no problem
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
-        #- mka -j16 $TARGET &
-      - mmm -j16 external/ hardware/ frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs system/
+      - mka -j16 $TARGET &
+        #- mmm -j16 external/ hardware/ frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs system/ &
       - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - jobs
       - kill %1
