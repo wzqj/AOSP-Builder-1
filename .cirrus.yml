@@ -114,7 +114,7 @@ task:
       - make -j16 hiddenapi-lists-docs || echo no problem
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
-      - mka -j16 $TARGET &
+      - mka $TARGET &
       - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - jobs
       - kill %1
