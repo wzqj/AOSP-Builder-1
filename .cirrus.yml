@@ -90,15 +90,6 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
-      - sleep 75m #waits for ~15m docs build times, then the rest
-      - cd $CIRRUS_WORKING_DIR
-      - sync
-      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
-      - cd ccache_url/
-      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
-      - ls -lah
-      - cat ccache_url.txt
 
   build_ccache_script:
       - echo "============================"
@@ -121,10 +112,19 @@ task:
       - kill %1
       - sleep 1
       - jobs
+      - kill -9 %1
+      - jobs
       - ccache -s
-      - wait
+      - cd $CIRRUS_WORKING_DIR
+      - sync
+      - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
+      - cd ccache_url/
+      - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
+      - wait -f
       - ls -lah
       - cat ccache_url.txt
+      - wait
+      - ls -lah
 
   always:
     upload_caches:
