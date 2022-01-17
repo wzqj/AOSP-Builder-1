@@ -115,7 +115,7 @@ task:
       - jobs
       - kill $(ps af | grep mka | cut --delimiter=" "  --fields 2)
       - jobs
-      - kill -9 %1
+      - kill -9 %1 || echo failed sigkill
       - jobs
       - ccache -s
       - cd $CIRRUS_WORKING_DIR
@@ -125,7 +125,7 @@ task:
       - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - wait -f
       - ls -lah
-      - cat ccache_url.txt
+      - tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready && tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}') && sleep 2h
       - wait
       - ls -lah
 
