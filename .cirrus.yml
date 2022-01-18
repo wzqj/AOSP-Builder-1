@@ -121,6 +121,9 @@ task:
       - kill %1
       - jobs
       - ccache -s
+      - while [ ! $(pgrep wget | tail -n 1) = "" ]
+      - do sleep 1
+      - done
       - tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready && tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' && sleep 2h
       - wait
       - ls -lah
