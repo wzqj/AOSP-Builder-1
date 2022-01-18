@@ -44,7 +44,7 @@ task:
        - echo "============================"
        - export DEBIAN_FRONTEND=noninteractive
        - apt update
-       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz lbzip2 fontconfig ttf-dejavu python3 -y
+       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz lbzip2 fontconfig ttf-dejavu python3 tmate -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
        - git config --global user.email "9105604+wzqj@users.noreply.github.com"
