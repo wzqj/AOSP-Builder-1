@@ -90,6 +90,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
+      - sleep 75m
       - cd $CIRRUS_WORKING_DIR
       - sync
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
@@ -97,6 +98,7 @@ task:
       - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - wait -f
       - ls -lah
+      - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
 
   build_ccache_script:
       - echo "============================"
