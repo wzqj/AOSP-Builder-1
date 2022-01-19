@@ -95,7 +95,7 @@ task:
       - sync
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - ls -lah
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
 
