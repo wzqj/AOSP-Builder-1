@@ -96,7 +96,6 @@ task:
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
       - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
-      - wait -f
       - ls -lah
       - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
 
@@ -123,7 +122,6 @@ task:
       - do sleep 1
       - done
       - tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready && tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' && sleep 2h
-      - wait
       - ls -lah
 
   always:
