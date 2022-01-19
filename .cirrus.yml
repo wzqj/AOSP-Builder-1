@@ -110,10 +110,10 @@ task:
       - . build/envsetup.sh
       - lunch "$LUNCH_COMBO"
       - make -j16 api-stubs-docs || echo no problem
-        #- make -j16 hiddenapi-lists-docs || echo no problem
+      - make -j16 hiddenapi-lists-docs || echo no problem
       - make -j16 system-api-stubs-docs || echo no problem
       - make -j16 test-api-stubs-docs || echo no problem
-      - m -j16 $TARGET&
+      - mka -j16 $TARGET&
       - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - kill %1
       - jobs
