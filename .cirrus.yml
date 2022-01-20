@@ -44,7 +44,7 @@ task:
        - echo "============================"
        - export DEBIAN_FRONTEND=noninteractive
        - apt update
-       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz lbzip2 fontconfig ttf-dejavu python3 tmate -y
+       - apt install sudo git aria2 curl wget rsync zip unzip lzma cpio ccache clang axel tar pigz lbzip2 fontconfig ttf-dejavu python3 -y
        - sudo ln -sf /usr/bin/python3 /usr/bin/python
        - git config --global user.name "wzqj"
        - git config --global user.email "9105604+wzqj@users.noreply.github.com"
@@ -90,7 +90,7 @@ task:
       - ls -l -a -h
 
   upload_ccache_background_script:
-      - sleep 80m
+      - sleep 75m
       - cd $CIRRUS_WORKING_DIR
       - sync
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
@@ -124,7 +124,6 @@ task:
       - do sleep 1
       - done
       - ccache -s
-      - tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready && tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}' && sleep 2h
       - ls -lah
 
   always:
