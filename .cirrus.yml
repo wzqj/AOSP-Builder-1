@@ -123,6 +123,9 @@ task:
       - sleep 1
       - jobs
       - ps ax
+      - while [ ! $(pgrep wget | tail -n 1) = "" ]
+      - do sleep 1
+      - done
       - ccache -s
       - wait
       - ls -lah
