@@ -21,6 +21,7 @@ env:
     CCACHE_DIR: $CIRRUS_WORKING_DIR/ccache
     CCACHE_URL_DIR: $CIRRUS_WORKING_DIR/ccache_url
     CCACHE_URL_FILE: $CCACHE_URL_DIR/ccache_url.txt
+    OUT_PATH: $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
 
 task:
   name: "build_ccache"
@@ -126,6 +127,26 @@ task:
       - done
       - ccache -s
       - ls -lah
+      - echo "============================"
+      - echo "Uploading the Build..."
+      - echo "============================"
+      - pwd
+      - ls -lah
+      - ls -lh $OUT_PATH
+      - cd $OUT_PATH
+      - du --max-depth=1 -h $OUT_PATH
+      - chmod 777 *
+      - for file in recovery.img *.zip
+      - do wget --method PUT --body-file=$file https://transfer.sh/$file -O - -nv | tee link.txt & 
+      - done
+      - wait -f
+      - echo " "
+      - echo "============================"
+      - echo "Build Uploaded!"
+      - echo "Please see the link Below-  "
+      - echo "----------------------------"
+      - cat link.txt && echo " "
+      - echo "============================"
 
   always:
     check_empty_ccache_url_script:
@@ -143,33 +164,6 @@ task:
       - ls -l -a -h
       - ccache -s
         
-  Upload_script:
-      - cat $CCACHE_URL_FILE
-        #      - if [ -d $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE" ]
-        #      - then
-      - echo "============================"
-      - echo "Uploading the Build..."
-      - echo "============================"
-        #- tar -cf out.tar $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - pwd
-      - ls -lah
-      - ls -lh $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - cd $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - du --max-depth=1 -h $CIRRUS_WORKING_DIR/work/out/target/product/"$DEVICE"
-      - chmod 777 *
-        #- curl --upload-file out.tar https://transfer.sh | tee link.txt && echo " "
-      - for file in recovery.img lineage-18.1*;
-      - do wget --method PUT --body-file=$file https://transfer.sh/$file -O - -nv | tee link.txt & 
-      - done
-      - wait -f
-      - echo " "
-      - echo "============================"
-      - echo "Build Uploaded!"
-      - echo "Please see the link Below-  "
-      - echo "----------------------------"
-      - cat link.txt && echo " "
-      - echo "============================"
-        #- fi
      
 
 task:
