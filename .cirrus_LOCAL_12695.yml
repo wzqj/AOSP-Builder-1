@@ -96,10 +96,10 @@ task:
       - sync
       - tar --use-compress-program="lbzip2 -k" -cf ccache.tar.bz2 ccache/ || [[ $? -eq 1 ]]
       - cd ccache_url/
-      - time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || time wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
+      - wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt || wget --no-check-certificate --method PUT --body-file=$CIRRUS_WORKING_DIR/ccache.tar.bz2 https://transfer.sh/ccache.tar.bz2 -O - > ccache_url.txt
       - wait -f
       - ls -lah
-      - if [ -f $CCACHE_URL_FILE ]; then cat $CCACHE_URL_FILE; fi
+      - cat ccache_url.txt
 
   build_ccache_script:
       - echo "============================"
@@ -117,14 +117,13 @@ task:
       - make -j16 test-api-stubs-docs || echo no problem
       - mka -j16 $TARGET &
         #- mmm -j16 external/ hardware/ frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs system/ &
-      - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
+      - sleep 70m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - jobs
-      - if [ ! $(jobs) = "" ]; then kill %1; fi
+      - kill %1
+      - sleep 1
       - jobs
-      - while [ ! $(pgrep wget | tail -n 1) = "" ]
-      - do sleep 1
-      - done
       - ccache -s
+      - wait
       - ls -lah
 
   always:
