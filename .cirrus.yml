@@ -118,7 +118,7 @@ task:
         #- mmm -j16 external/ hardware/ frameworks/base/core frameworks/base/data frameworks/base/api frameworks/base/libs system/ &
       - sleep 80m # leave enough time for upload_ccache to complete upload, otherwise ccache_url will be empty
       - jobs
-      - kill %1
+      - if [ ! $(jobs | cat) = "" ]; then kill %1; fi
       - jobs
       - while [ ! $(pgrep wget | tail -n 1) = "" ]
       - do sleep 1
