@@ -1,21 +1,21 @@
 env:
     CIRRUS_CLONE_DEPTH: 1
     CIRRUS_LOG_TIMESTAMP: true
-    MANIFEST: https://github.com/LineageOS/android.git -b lineage-18.1
-    DEVICE: bacon
-    OEM: oneplus
+    MANIFEST: https://github.com/LineageOS/android.git -b cm-13.0
+    DEVICE: trltetmo
+    OEM: samsung
     LOCAL_MANIFEST: https://github.com/wzqj/local_manifests
-    DT_LINK: https://github.com/LineageOS/android_device_oneplus_bacon
+    DT_LINK: https://github.com/LineageOS/android_device_samsung_trltetmo
     DT_PATH: device/$OEM/$DEVICE
-    VT_LINK: https://github.com/TheMuppets/proprietary_vendor_oneplus
+    VT_LINK: https://github.com/TheMuppets/proprietary_vendor_samsung
     VT_PATH: vendor/$OEM/$DEVICE
-    KT_LINK: https://github.com/LineageOS/android_kernel_oppo_msm8974
+    KT_LINK: https://github.com/LineageOS/android_kernel_samsung_trlte
     PLATFORM: msm8974
-    KT_PATH: kernel/oppo/$PLATFORM
-    TARGET: bacon
+    KT_PATH: kernel/samsung/trlte
+    TARGET: trltetmo
     EXTRA_CMD: export SKIP_ABI_CHECKS=true
-    LUNCH_COMBO: lineage_$DEVICE-userdebug
-    OUTPUT: lineage*.zip
+    LUNCH_COMBO: cm-$DEVICE-userdebug
+    OUTPUT: cm*.zip
     USE_CCACHE: 1
     CCACHE_EXEC: /usr/bin/ccache
     CCACHE_DIR: $CIRRUS_WORKING_DIR/ccache
